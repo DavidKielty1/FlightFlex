@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: flight
+      POSTGRES_PASSWORD: flex
+      POSTGRES_DB: flightflexdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  grpc_java_server:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: grpc-java-server
+    depends_on:
+      - postgres
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./Backend:/app
+    command: ["java", "-jar", "/app/FlightFlex-1.0-SNAPSHOT.jar"]
+
+volumes:
+  postgres_data:
+# 6c4d60ad6147f709811fb00a29650f870684d6fc9e47329f9bcee241ecd37602
+
